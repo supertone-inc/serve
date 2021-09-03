@@ -207,7 +207,7 @@ class BaseHandler(abc.ABC):
             start_post_time = time.time()
             output = self.postprocess(output)
             end_post_time = time.time()
-            metrics.add_time('InferenceTime', round((end_post_time - start_post_time) * 1000, 2), None, 'ms')
+            metrics.add_time('PostprocessTime', round((end_post_time - start_post_time) * 1000, 2), None, 'ms')
         else:
             output = self.explain_handle(data_preprocess, data)
 
