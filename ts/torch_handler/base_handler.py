@@ -194,11 +194,20 @@ class BaseHandler(abc.ABC):
         self.context = context
         metrics = self.context.metrics
 
+        start_pre_time = time.time()
         data_preprocess = self.preprocess(data)
+        end_pre_time = time.time()
+        metrics.add_time('PreprocessTime', round((end_pre_time  - start_pre_time) * 1000, 2), None, 'ms')
 
         if not self._is_explain():
+            start_inference_time = time.time()
             output = self.inference(data_preprocess)
+            end_inference_time = time.time()
+            metrics.add_time('InferenceTime', round((end_inference_time - start_inference_time) * 1000, 2), None, 'ms')
+            start_post_time = time.time()
             output = self.postprocess(output)
+            end_post_time = time.time()
+            metrics.add_time('InferenceTime', round((end_post_time - start_post_time) * 1000, 2), None, 'ms')
         else:
             output = self.explain_handle(data_preprocess, data)
 
